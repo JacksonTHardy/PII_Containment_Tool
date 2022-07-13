@@ -33,26 +33,45 @@ def processfiles(completefilelist: list):
 
 def scanfile(file: str):
     with open(file, "r") as f:
-        SSN: str = "ssn"
-        social_security_number: str = "social security number"
-        national_id: str = "national id"
         has_ssn: bool = False
+        file_contents: str = f.read()  # Giant if statment below is hard to follow.
+        # I had to do it like this because the string literals would not pick up stuff like this <SSN>
+        if (
+            re.search(
+                "[n]+[a]+[t]+[i]+[o]+[n]+[a]+[l]+[ ]+[i]+[d]",
+                file_contents.lower(),
+            )
+            or re.search("[s]+[s]+[n]", file_contents.lower())
+            or re.search(
+                "[s]+[o]+[c]+[i]+[a]+[l]+[ ]+[s]+[e]+[c]+[u]+[r]+[i]+[t]+[y]+[ ]+[n]+[u]+[m]+[b]+[e]+[r]",
+                file_contents.lower(),
+            )
+            or re.search("(\\d{3}-\\d{2}-\\d{4})", file_contents) is not None
+        ):
+            has_ssn = True
+
+        if has_ssn is True:
+            print(file)
+        """commented out stuff is another solution than the one above
         for line in f:  # for each line in the file
             if (
-                SSN and social_security_number and national_id in line.lower()
-            ):  # check for hard coded strings in the file
+                "ssn" or "social security number" or "national id"
+            ) in line.lower():  # check for hard coded strings in the file
                 has_ssn = True
 
         f.seek(0)  # reset the file position back to the beginning
+
         social_found = re.search(
             "(\\d{3}-\\d{2}-\\d{4})", f.read()
         )  # search for this specific pattern
+
         if (
-            social_found is not None or has_ssn is True
+            social_found is not None or has_ssn
         ):  # if file is flagged print the file name
             print(file)
-            has_ssn = False
-        f.close
+        """
+
+    f.close
 
 
 def main():
