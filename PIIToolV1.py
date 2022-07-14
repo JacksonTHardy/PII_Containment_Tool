@@ -7,6 +7,8 @@ from os.path import isfile, isdir, join
 from pathlib import Path
 import re
 
+flagged_files: list[str] = []
+
 
 def getfiles(directory: str, filelist: list[str]) -> list[str]:
     # print("Current working directory: {0}".format(directory))
@@ -48,9 +50,22 @@ def scanfile(file: str):
             has_ssn = True
 
         if has_ssn:
-            print(file)
+            storefile(file)
 
     f.close
+
+
+def displayfiles():
+    for file in flagged_files:
+        print(file)
+
+
+def getfile(file_index: int) -> str:
+    return flagged_files[file_index]
+
+
+def storefile(file: str):
+    flagged_files.append(file)
 
 
 def main():
@@ -62,6 +77,13 @@ def main():
 
     print("Files with matching text:")
     processfiles(completefilelist)
+    displayfiles()
+    open_files = input("Would you like to open these flagged files? (y,n)")
+    file_num: int = 0
+    while file_num < len(flagged_files):
+        if open_files.lower() == "y":
+            os.startfile(getfile(file_num))
+        file_num += 1
 
 
 if __name__ == "__main__":
