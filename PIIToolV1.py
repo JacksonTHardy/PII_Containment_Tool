@@ -6,6 +6,8 @@ from os import listdir
 from os.path import isfile, isdir, join
 from pathlib import Path
 import re
+import subprocess
+from tkinter import Y
 
 flagged_files: list[str] = []
 
@@ -60,10 +62,6 @@ def displayfiles():
         print(file)
 
 
-def getfile(file_index: int) -> str:
-    return flagged_files[file_index]
-
-
 def storefile(file: str):
     flagged_files.append(file)
 
@@ -78,12 +76,11 @@ def main():
     print("Files with matching text:")
     processfiles(completefilelist)
     displayfiles()
-    open_files = input("Would you like to open these flagged files? (y,n)")
-    file_num: int = 0
-    while file_num < len(flagged_files):
+    open_files = input("Would you like to open these flagged files? (y/n)")
+
+    for file in flagged_files:
         if open_files.lower() == "y":
-            os.startfile(getfile(file_num))
-        file_num += 1
+            subprocess.Popen(["notepad.exe", file])
 
 
 if __name__ == "__main__":
