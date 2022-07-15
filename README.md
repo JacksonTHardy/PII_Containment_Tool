@@ -6,7 +6,7 @@ Detects Personally Identifiable Information (PII) within a working directory. Al
 
 ## Requirements
 - Python >= 3.10
-- Other Requirements are found in Requirements.txt
+- Other Requirements are found in `Requirements.txt`
 - To install, use the below command in the Terminal
 ```python
 python -m pip install -r requirements.txt
