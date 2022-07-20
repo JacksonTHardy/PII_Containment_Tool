@@ -35,15 +35,15 @@ def processfiles(completefilelist: list):
     for file in completefilelist:
         ext: str = Path(file).suffix  # saves the file suffix like .txt into ext
         match ext:
-            case ".txt" | ".csv" | ".json" | ".xml":  # if the file ends in one of the following extensions
+            # if the file ends in one of the following extensions
+            case ".txt" | ".csv" | ".json" | ".xml":
                 scanfile(file)
 
 
 def scanfile(file: str):
     with open(file, "r") as f:
         has_ssn: bool = False
-        file_contents: str = f.read()  # Giant if statment below is hard to follow.
-        # I had to do it like this because the string literals would not pick up stuff like this <SSN>
+        file_contents: str = f.read()
         if re.search(
             "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|(\\d{3}-\\d{2}-\\d{4})",
             file_contents.lower(),
