@@ -7,7 +7,6 @@ from os.path import isfile, isdir, join
 from pathlib import Path
 import re
 import subprocess
-from tkinter import Y
 
 flagged_files: list[str] = []
 
