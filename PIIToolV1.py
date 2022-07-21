@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Import the os module
-import os
+# import os
 from os import listdir
 from os.path import isfile, isdir, join
 from pathlib import Path

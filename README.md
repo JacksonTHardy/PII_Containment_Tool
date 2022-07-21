@@ -33,5 +33,5 @@ python -m pip install -r requirements.txt
 ### User Interface
 - [X] Command Line Tool
 - [X] Open Files For Review
-- [ ] Open File Explorer for Directory Selection
+- [X] Open File Explorer for Directory Selection
 - [ ] Full UI 
