@@ -16,8 +16,8 @@ flagged_files: list[str] = []
 def getfiles(directory: str, filelist: list[str]) -> list[str]:
     # print("Current working directory: {0}".format(directory))
     for file in listdir(directory):  # for each file in the listdir
-        path = join(directory, file)  # concats directory with the file
-        if isdir(path):  # determines if path is a exsisting directory or not
+        path = join(directory, file)  # concat directory with the file
+        if isdir(path):  # determines if path is a existing directory or not
             filelist = getfiles(path, filelist)
         elif isfile(path):  # determines if path exist as a file
             filelist.append(path)  # if file exist it adds it to a list of all files
@@ -27,7 +27,7 @@ def getfiles(directory: str, filelist: list[str]) -> list[str]:
     return filelist  # returns a list of all the file names that exist
 
 
-def processfiles(completefilelist: list):
+def processfiles(completefilelist: list) -> None:
     """_summary_
     Next: store files, prompt user to open flagged files.
     Args:
@@ -41,7 +41,7 @@ def processfiles(completefilelist: list):
                 scanfile(file)
 
 
-def scanfile(file: str):
+def scanfile(file: str) -> None:
     with open(file, "r") as f:
         has_ssn: bool = False
         file_contents: str = f.read()
@@ -57,23 +57,23 @@ def scanfile(file: str):
     f.close
 
 
-def displayfiles():
+def displayfiles() -> None:
     for file in flagged_files:
         print(file)
 
 
-def storefile(file: str):
+def storefile(file: str) -> None:
     flagged_files.append(file)
 
 
-def main():
+def main() -> None:
     # cwd = os.getcwd()  # get the current working directory
     filelist = []  # creates array
     tkinter.Tk().withdraw()
     path = filedialog.askdirectory()
     completefilelist = getfiles(
         path, filelist
-    )  # fills filelist woth all the files in the current working directory
+    )  # fills filelist with all the files in the current working directory
 
     print("Files with matching text:")
     processfiles(completefilelist)

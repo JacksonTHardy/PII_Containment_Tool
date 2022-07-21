@@ -11,5 +11,13 @@
         "--show-column-numbers",
         "--no-pretty",
         "--disallow-untyped-defs=True"
+      ],
+      "cSpell.words": [
+        "completefilelist",
+        "displayfiles",
+        "getfiles",
+        "processfiles",
+        "scanfile",
+        "storefile"
       ]
 }
