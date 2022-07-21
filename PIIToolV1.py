@@ -7,13 +7,14 @@ from os.path import isfile, isdir, join
 from pathlib import Path
 import re
 import subprocess
+import tkinter
+from tkinter import filedialog
 
 flagged_files: list[str] = []
 
 
 def getfiles(directory: str, filelist: list[str]) -> list[str]:
     # print("Current working directory: {0}".format(directory))
-
     for file in listdir(directory):  # for each file in the listdir
         path = join(directory, file)  # concats directory with the file
         if isdir(path):  # determines if path is a exsisting directory or not
@@ -66,10 +67,12 @@ def storefile(file: str):
 
 
 def main():
-    cwd = os.getcwd()  # get the current working directory
+    # cwd = os.getcwd()  # get the current working directory
     filelist = []  # creates array
+    tkinter.Tk().withdraw()
+    path = filedialog.askdirectory()
     completefilelist = getfiles(
-        cwd, filelist
+        path, filelist
     )  # fills filelist woth all the files in the current working directory
 
     print("Files with matching text:")
