@@ -89,8 +89,8 @@ def main():
     displayfiles()
     open_files = input("Would you like to open these flagged files? (y/n)")
 
-    for file in flagged_files:
-        if open_files.lower() == "y":
+    if open_files.lower() == "y":
+        for file in flagged_files:
             subprocess.Popen(["notepad.exe", file])
 
 
