@@ -2,6 +2,7 @@
 
 # Import the os module
 # import os
+from operator import truediv
 from os import listdir
 from os.path import isfile, isdir, join
 from pathlib import Path
@@ -64,6 +65,14 @@ def displayfiles():
 
 def storefile(file: str):
     flagged_files.append(file)
+
+
+def containsfile(file: str):
+    for files in flagged_files:
+        if file == files:
+            return True
+        else:
+            return False
 
 
 def main():
