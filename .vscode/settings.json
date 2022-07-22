@@ -11,5 +11,20 @@
         "--show-column-numbers",
         "--no-pretty",
         "--disallow-untyped-defs=True"
-      ]
+      ],
+      "cSpell.words": [
+        "completefilelist",
+        "displayfiles",
+        "getfiles",
+        "initialdir",
+        "processfiles",
+        "scanfile",
+        "storefile"
+      ],
+      "python.languageServer": "Pylance",
+      "python.analysis.completeFunctionParens": true,
+      "python.analysis.inlayHints.functionReturnTypes": true,
+      "python.analysis.inlayHints.variableTypes": true,
+      "python.analysis.typeCheckingMode": "strict",
+      "editor.fontSize": 12
 }
