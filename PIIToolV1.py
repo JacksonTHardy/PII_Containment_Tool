@@ -3,12 +3,13 @@
 # Import the os module
 # import os
 import logging
-from os import listdir
-from os.path import isfile, isdir, join
-from pathlib import Path
 import re
 import subprocess
 import tkinter
+from datetime import datetime
+from os import listdir
+from os.path import isdir, isfile, join
+from pathlib import Path
 from tkinter import filedialog
 
 
@@ -65,28 +66,37 @@ def storefile(file: str) -> None:
 
 def main() -> None:
     filelist: list[str] = []  # creates array
-    tkinter.Tk().withdraw()
-    path: str = filedialog.askdirectory()
+    tkinter.Tk(screenName="PII Containment Tool").withdraw()
+    path: str = filedialog.askdirectory(initialdir="\\")
     completefilelist: list[str] = getfiles(
         path, filelist
     )  # fills filelist with all the files in the current working directory
 
-    print("Files with matching text:")
     processfiles(completefilelist)
-    displayfiles()
-    while True:
-        open_files: str = input("Would you like to open these flagged files? (Y/N)")
-        if open_files.upper() in ["N", "Y"]:
-            break
-        else:
-            print("That Command is not Recognized")
+    if len(flagged_files) != 0:
+        print(f"Files Flagged | File Count: {len(flagged_files)}")
+        displayfiles()
 
-    if open_files.upper() == "Y":
-        for file in flagged_files:
-            subprocess.Popen(["notepad.exe", file])
+        while True:
+            open_files: str = input("Would you like to open these flagged files? (Y/N)")
+            if open_files.upper() in ["N", "Y"]:
+                break
+            else:
+                print("That Command is not Recognized")
+
+        if open_files.upper() == "Y":
+            for file in flagged_files:
+                subprocess.Popen(["notepad.exe", file])
+    else:
+        print("No Flagged files")
 
 
 if __name__ == "__main__":
     flagged_files: list[str] = []
-    logging.basicConfig(filename="fileLog.log", encoding="utf-8", level=logging.DEBUG)
+    now: str = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
+    logging.basicConfig(
+        filename=f"log_folder\\fileLog_{now}.log",
+        encoding="utf-8",
+        level=logging.DEBUG,
+    )
     main()
