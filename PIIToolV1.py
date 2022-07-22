@@ -2,7 +2,14 @@
 
 # Import the os module
 # import os
+<<<<<<< HEAD
+from operator import truediv
+from os import listdir
+from os.path import isfile, isdir, join
+from pathlib import Path
+=======
 import logging
+>>>>>>> 0ad4555e4d1ef293b3d9cb69b0fb58d00eb9634e
 import re
 import subprocess
 import tkinter
@@ -64,11 +71,28 @@ def storefile(file: str) -> None:
     flagged_files.append(file)
 
 
+<<<<<<< HEAD
+def containsfile(file: str):
+    for files in flagged_files:
+        if file == files:
+            return True
+        else:
+            return False
+
+
+def main():
+    # cwd = os.getcwd()  # get the current working directory
+    filelist = []  # creates array
+    tkinter.Tk().withdraw()
+    path = filedialog.askdirectory()
+    completefilelist = getfiles(
+=======
 def main() -> None:
     filelist: list[str] = []  # creates array
     tkinter.Tk(screenName="PII Containment Tool").withdraw()
     path: str = filedialog.askdirectory(initialdir="\\", title="PII Containment Tool")
     completefilelist: list[str] = getfiles(
+>>>>>>> 0ad4555e4d1ef293b3d9cb69b0fb58d00eb9634e
         path, filelist
     )  # fills filelist with all the files in the current working directory
 
@@ -77,6 +101,11 @@ def main() -> None:
         print(f"Files Flagged | File Count: {len(flagged_files)}")
         displayfiles()
 
+<<<<<<< HEAD
+    if open_files.lower() == "y":
+        for file in flagged_files:
+            subprocess.Popen(["notepad.exe", file])
+=======
         while True:
             open_files: str = input("Would you like to open these flagged files? (Y/N)")
             if open_files.upper() in ["N", "Y"]:
@@ -89,6 +118,7 @@ def main() -> None:
                 subprocess.Popen(["notepad.exe", file])
     else:
         print("No Flagged files")
+>>>>>>> 0ad4555e4d1ef293b3d9cb69b0fb58d00eb9634e
 
 
 if __name__ == "__main__":
