@@ -14,6 +14,8 @@ from os.path import isdir, isfile, join, exists
 from pathlib import Path
 from tkinter import filedialog
 from enum import Enum
+from rich.table import Table
+from rich.console import Console
 
 
 class Severity(Enum):
@@ -91,20 +93,30 @@ def findnextpath(filePath: str) -> str:
         i += 1
         if i > 1:
             filePath = filePath[0 : len(filePath) - 1]
+        if i > 10 and i < 100:
+            filePath = filePath[0 : len(filePath) - 2]
+        if i > 100 and i < 1000:
+            filePath = filePath[0 : len(filePath) - 3]
         filePath += str(i)
     return filePath
 
 
 def createfiledata(filepath: str) -> None:
     counter: int = 0
+    table = Table(title="Flagged File Data")
+    table.add_column("File Path", justify="left", style="blue")
+    table.add_column("Severity", justify="left")
     with open(
         findnextpath(filepath + "flaggedFileData"),
         "w",
     ) as f:
         for file in flagged_files:
-            f.write(file)
-            f.write(flagged_severity[counter].__str__() + "\n")
+            table.add_row(file, flagged_severity[counter].__str__()[9:])
+            # f.write(file)
+            # f.write(flagged_severity[counter].__str__()[9:] + "\n")
             counter += 1
+        console = Console()
+        f.write(str(table))
     f.close()
 
 
