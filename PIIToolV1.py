@@ -50,6 +50,7 @@ def scanfile(file: File) -> None:
         file_contents: str = f.read()
         if re.search("(\\d{3}-\\d{2}-\\d{4})", file_contents):
             file.severity = Severity.red
+            file.flaggeditems.append("SSN(RegEx)")
             logging.critical(
                 f"This file contains Social Security Number| File: {file.filepath}"
             )
@@ -58,6 +59,7 @@ def scanfile(file: File) -> None:
             file_contents.lower(),
         ):
             file.severity = Severity.yellow
+            file.flaggeditems.append("SSN(Hard-coded)")
             logging.error(
                 f"This file potentially contains Social Security Number| File: {file.filepath}"
             )
@@ -72,11 +74,18 @@ def displayfiles(file_folder: list[File]) -> None:
             print(f"{file.filename}: {file.severity.name}")
 
 
-def create_file_data() -> None:
+def create_file_data(file_folder: list[File]) -> None:
     table = Table(title="Flagged File Data")
-    table.add_column("File Path", justify="left", style="blue")
     table.add_column("Severity", justify="left")
-
+    table.add_column("File Path", justify="left", style="blue")
+    table.add_column("Flagged Items", justify="left", style="purple")
+    for file in file_folder:
+        if file.severity.value > 0:
+            table.add_row(
+                file.severity.name.title(),
+                file.filepath,
+                ", ".join(file.flaggeditems),
+            )
     console = Console()
     console.print(table)
 
@@ -86,7 +95,7 @@ def console_print(file_folder: list[File]):
         f"Files Flagged | File Count: {len([x for x in file_folder if x.severity.value>0])}"
     )
     displayfiles(file_folder)
-    create_file_data()
+    create_file_data(file_folder)
 
     while True:
         open_files: str = input("Would you like to open these flagged files? (Y/N)")

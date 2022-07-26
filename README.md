@@ -30,7 +30,7 @@ python -m pip install -r requirements.txt
     - [ ] Ignore
     - [ ] Mask Data
     - [ ] Manual Update
-- [ ] Intensity Levels for flagged files
+- [X] Intensity Levels for flagged files
 ### User Interface
 - [X] Command Line Tool
 - [X] Open Files For Review
