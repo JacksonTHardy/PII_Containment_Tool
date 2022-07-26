@@ -48,20 +48,23 @@ def processfiles(file_folder: list[File]) -> None:
 def scanfile(file: File) -> None:
     with open(file.filepath, "r") as f:
         file_contents: str = f.read()
-        if re.search("(\\d{3}-\\d{2}-\\d{4})", file_contents):
+        if re.search(
+            "(\\d{3}-\\d{2}-\\d{4})|(^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$)",
+            file_contents.upper(),
+        ):
             file.severity = Severity.red
-            file.flaggeditems.append("SSN(RegEx)")
+            file.flaggeditems.append("PATTERN(RegEx)")
             logging.critical(
-                f"This file contains Social Security Number| File: {file.filepath}"
+                f"This file contains Private Information| File: {file.filepath}"
             )
         elif re.search(
-            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn",
+            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|email[\\s_]address",
             file_contents.lower(),
         ):
             file.severity = Severity.yellow
             file.flaggeditems.append("SSN(Hard-coded)")
             logging.error(
-                f"This file potentially contains Social Security Number| File: {file.filepath}"
+                f"This file potentially contains Private Information| File: {file.filepath}"
             )
         else:
             file.severity = Severity.green
