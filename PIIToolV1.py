@@ -2,22 +2,24 @@
 
 # Import the os module
 # import os
-<<<<<<< HEAD
-from operator import truediv
-from os import listdir
-from os.path import isfile, isdir, join
-from pathlib import Path
-=======
+# from ctypes import sizeof
+
 import logging
->>>>>>> 0ad4555e4d1ef293b3d9cb69b0fb58d00eb9634e
 import re
 import subprocess
 import tkinter
 from datetime import datetime
 from os import listdir
-from os.path import isdir, isfile, join
+from os.path import isdir, isfile, join, exists
 from pathlib import Path
 from tkinter import filedialog
+from enum import Enum
+
+
+class Severity(Enum):
+    red = 2
+    yellow = 1
+    green = 0
 
 
 def getfiles(directory: str, filelist: list[str]) -> list[str]:
@@ -60,6 +62,7 @@ def scanfile(file: str) -> None:
             file_contents.lower(),
         ):
             storefile(file)
+            processSeverity(file_contents)
 
 
 def displayfiles() -> None:
@@ -71,28 +74,45 @@ def storefile(file: str) -> None:
     flagged_files.append(file)
 
 
-<<<<<<< HEAD
-def containsfile(file: str):
-    for files in flagged_files:
-        if file == files:
-            return True
-        else:
-            return False
+def processSeverity(contents: str) -> None:
+    if re.search("(\\d{3}-\\d{2}-\\d{4})", contents):
+        flagged_severity.append(Severity.red)
+    elif re.search(
+        "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn", contents.lower()
+    ):
+        flagged_severity.append(Severity.yellow)
+    else:
+        flagged_severity.append(Severity.green)
 
 
-def main():
-    # cwd = os.getcwd()  # get the current working directory
-    filelist = []  # creates array
-    tkinter.Tk().withdraw()
-    path = filedialog.askdirectory()
-    completefilelist = getfiles(
-=======
+def findnextpath(filePath: str) -> str:
+    i: int = 0
+    while exists(filePath):
+        i += 1
+        if i > 1:
+            filePath = filePath[0 : len(filePath) - 1]
+        filePath += str(i)
+    return filePath
+
+
+def createfiledata(filepath: str) -> None:
+    counter: int = 0
+    with open(
+        findnextpath(filepath + "flaggedFileData"),
+        "w",
+    ) as f:
+        for file in flagged_files:
+            f.write(file)
+            f.write(flagged_severity[counter].__str__() + "\n")
+            counter += 1
+    f.close()
+
+
 def main() -> None:
     filelist: list[str] = []  # creates array
     tkinter.Tk(screenName="PII Containment Tool").withdraw()
-    path: str = filedialog.askdirectory(initialdir="\\")
+    path: str = filedialog.askdirectory()
     completefilelist: list[str] = getfiles(
->>>>>>> 0ad4555e4d1ef293b3d9cb69b0fb58d00eb9634e
         path, filelist
     )  # fills filelist with all the files in the current working directory
 
@@ -100,12 +120,12 @@ def main() -> None:
     if len(flagged_files) != 0:
         print(f"Files Flagged | File Count: {len(flagged_files)}")
         displayfiles()
+        print("\n")
+        print(flagged_severity)
+        createfiledata(
+            "C:\\Users\\JackHardy\\PII_Containment_Tool\\PII_Containment_Tool\\Flagged_file_data_Log\\"
+        )
 
-<<<<<<< HEAD
-    if open_files.lower() == "y":
-        for file in flagged_files:
-            subprocess.Popen(["notepad.exe", file])
-=======
         while True:
             open_files: str = input("Would you like to open these flagged files? (Y/N)")
             if open_files.upper() in ["N", "Y"]:
@@ -118,11 +138,13 @@ def main() -> None:
                 subprocess.Popen(["notepad.exe", file])
     else:
         print("No Flagged files")
->>>>>>> 0ad4555e4d1ef293b3d9cb69b0fb58d00eb9634e
 
 
 if __name__ == "__main__":
+    global flagged_files
     flagged_files: list[str] = []
+    global flagged_severity
+    flagged_severity: list[Enum] = []
     now: str = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     logging.basicConfig(
         filename=f"log_folder\\fileLog_{now}.log",

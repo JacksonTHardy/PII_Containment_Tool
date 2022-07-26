@@ -21,7 +21,7 @@ python -m pip install -r requirements.txt
         - [X] Field Headers
         - [X] Regex values
     - [ ] Address Data
-    - [ ] Name Data
+    - [ ] Name Data 
     - [ ] Email
     - [ ] Phone Number
     - [ ] IDs
