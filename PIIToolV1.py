@@ -13,13 +13,7 @@ from os import listdir
 from os.path import isdir, isfile, join, exists
 from pathlib import Path
 from tkinter import filedialog
-from enum import Enum
-
-
-class Severity(Enum):
-    red = 2
-    yellow = 1
-    green = 0
+from severity_enum import Severity
 
 
 def getfiles(directory: str, filelist: list[str]) -> list[str]:
@@ -62,7 +56,7 @@ def scanfile(file: str) -> None:
             file_contents.lower(),
         ):
             storefile(file)
-            processSeverity(file_contents)
+            process_severity(file_contents)
 
 
 def displayfiles() -> None:
@@ -74,7 +68,7 @@ def storefile(file: str) -> None:
     flagged_files.append(file)
 
 
-def processSeverity(contents: str) -> None:
+def process_severity(contents: str) -> None:
     if re.search("(\\d{3}-\\d{2}-\\d{4})", contents):
         flagged_severity.append(Severity.red)
     elif re.search(
@@ -85,20 +79,20 @@ def processSeverity(contents: str) -> None:
         flagged_severity.append(Severity.green)
 
 
-def findnextpath(filePath: str) -> str:
+def find_next_path(filepath: str) -> str:
     i: int = 0
-    while exists(filePath):
+    while exists(filepath):
         i += 1
         if i > 1:
-            filePath = filePath[0 : len(filePath) - 1]
-        filePath += str(i)
-    return filePath
+            filepath = filepath[0 : len(filepath) - 1]
+        filepath += str(i)
+    return filepath
 
 
-def createfiledata(filepath: str) -> None:
+def create_file_data(filepath: str) -> None:
     counter: int = 0
     with open(
-        findnextpath(filepath + "flaggedFileData"),
+        find_next_path(filepath + "flaggedFileData"),
         "w",
     ) as f:
         for file in flagged_files:
@@ -111,7 +105,7 @@ def createfiledata(filepath: str) -> None:
 def main() -> None:
     filelist: list[str] = []  # creates array
     tkinter.Tk(screenName="PII Containment Tool").withdraw()
-    path: str = filedialog.askdirectory(initialdir="\\", title="PII Containment Tool")
+    path: str = filedialog.askdirectory(title="PII Containment Tool")
     completefilelist: list[str] = getfiles(
         path, filelist
     )  # fills filelist with all the files in the current working directory
@@ -122,9 +116,7 @@ def main() -> None:
         displayfiles()
         print("\n")
         print(flagged_severity)
-        createfiledata(
-            "C:\\Users\\JackHardy\\PII_Containment_Tool\\PII_Containment_Tool\\Flagged_file_data_Log\\"
-        )
+        create_file_data("Flagged_file_data_Log")
 
         while True:
             open_files: str = input("Would you like to open these flagged files? (Y/N)")
@@ -144,7 +136,7 @@ if __name__ == "__main__":
     global flagged_files
     flagged_files: list[str] = []
     global flagged_severity
-    flagged_severity: list[Enum] = []
+    flagged_severity: list[object] = []
     now: str = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
     logging.basicConfig(
         filename=f"log_folder\\fileLog_{now}.log",
