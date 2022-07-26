@@ -111,7 +111,7 @@ def createfiledata(filepath: str) -> None:
 def main() -> None:
     filelist: list[str] = []  # creates array
     tkinter.Tk(screenName="PII Containment Tool").withdraw()
-    path: str = filedialog.askdirectory()
+    path: str = filedialog.askdirectory(initialdir="\\", title="PII Containment Tool")
     completefilelist: list[str] = getfiles(
         path, filelist
     )  # fills filelist with all the files in the current working directory
