@@ -49,7 +49,7 @@ def scanfile(file: File) -> None:
     with open(file.filepath, "r") as f:
         file_contents: str = f.read()
         if re.search(
-            "(\\d{3}-\\d{2}-\\d{4})|(^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$)",
+            "(\\d{3}-\\d{2}-\\d{4})|(^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$)|^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$",
             file_contents.upper(),
         ):
             file.severity = Severity.red
@@ -59,7 +59,7 @@ def scanfile(file: File) -> None:
                 f"This file contains Private Information| File: {file.filepath}"
             )
         elif re.search(
-            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|email[\\s_]address|e-mail[\\s_]address",
+            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|email[\\s_]address|e-mail[\\s_]address|phone[\\s_]?number|cell[\\s_]?phone[\\s_]?number",
             file_contents.lower(),
         ):
             file.severity = Severity.yellow

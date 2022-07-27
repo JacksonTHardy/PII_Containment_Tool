@@ -23,7 +23,7 @@ python -m pip install -r requirements.txt
     - [ ] Address Data
     - [ ] Name Data 
     - [X] Email
-    - [ ] Phone Number
+    - [X] Phone Number
     - [ ] IDs
 - [ ] Options for handling Flagged Files
     - [ ] Delete File
