@@ -22,7 +22,7 @@ python -m pip install -r requirements.txt
         - [X] Regex values
     - [ ] Address Data
     - [ ] Name Data 
-    - [ ] Email
+    - [X] Email
     - [ ] Phone Number
     - [ ] IDs
 - [ ] Options for handling Flagged Files

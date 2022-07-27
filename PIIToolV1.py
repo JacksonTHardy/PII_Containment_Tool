@@ -53,12 +53,13 @@ def scanfile(file: File) -> None:
             file_contents.upper(),
         ):
             file.severity = Severity.red
+
             file.flaggeditems.append("PATTERN(RegEx)")
             logging.critical(
                 f"This file contains Private Information| File: {file.filepath}"
             )
         elif re.search(
-            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|email[\\s_]address",
+            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|email[\\s_]address|e-mail[\\s_]address",
             file_contents.lower(),
         ):
             file.severity = Severity.yellow
@@ -77,6 +78,14 @@ def displayfiles(file_folder: list[File]) -> None:
             print(f"{file.filename}: {file.severity.name}")
 
 
+def severity_color(x: int) -> str:
+    if x == 2:
+        return "\033[1;31;40m Red"
+    if x == 1:
+        return "\033[1;33;40m Yellow"
+    return "\033[1;32;40m Green"
+
+
 def create_file_data(file_folder: list[File]) -> None:
     table = Table(title="Flagged File Data")
     table.add_column("Severity", justify="left")
@@ -85,10 +94,11 @@ def create_file_data(file_folder: list[File]) -> None:
     for file in file_folder:
         if file.severity.value > 0:
             table.add_row(
-                file.severity.name.title(),
+                file.severity.name,
                 file.filepath,
                 ", ".join(file.flaggeditems),
             )
+
     console = Console()
     console.print(table)
 
