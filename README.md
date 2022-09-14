@@ -16,6 +16,12 @@ python -m pip install -r requirements.txt
 ### Base Functionality
 - [X] Scan directory for files
 - [X] Filter for certain file extensions
+    - [X] .txt
+    - [X] .csv
+    - [X] .json
+    - [X] .xml
+    - [ ] .pdf
+    - [ ] .xlsx
 - [X] Read files for PII
     - [X] Social Security Number
         - [X] Field Headers
@@ -23,7 +29,11 @@ python -m pip install -r requirements.txt
     - [ ] Address Data
     - [ ] Name Data 
     - [X] Email
+        - [X] Field Headers
+        - [X] Regex values
     - [X] Phone Number
+        - [X] Field Headers
+        - [X] Regex values
     - [ ] IDs
 - [ ] Options for handling Flagged Files
     - [ ] Delete File
