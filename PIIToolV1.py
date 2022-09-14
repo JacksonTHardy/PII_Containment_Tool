@@ -48,22 +48,46 @@ def processfiles(file_folder: list[File]) -> None:
 def scanfile(file: File) -> None:
     with open(file.filepath, "r") as f:
         file_contents: str = f.read()
+        # SSN REGEX
         if re.search(
-            "(\\d{3}-\\d{2}-\\d{4})|(^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$)|^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$",
+            "(\\d{3}-\\d{2}-\\d{4})",
             file_contents.upper(),
         ):
             file.severity = Severity.red
 
-            file.flaggeditems.append("PATTERN(RegEx)")
+            file.flaggedItems.append("SSN PATTERN(RegEx)")
             logging.critical(
                 f"This file contains Private Information| File: {file.filepath}"
             )
+        # EMAIL REGEX
         elif re.search(
-            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|email[\\s_]address|e-mail[\\s_]address|phone[\\s_]?number|cell[\\s_]?phone[\\s_]?number",
+            "([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})",
+            file_contents.upper(),
+        ):
+            file.severity = Severity.red
+
+            file.flaggedItems.append("EMAIL PATTERN(RegEx)")
+            logging.critical(
+                f"This file contains Private Information| File: {file.filepath}"
+            )
+        # PHONE # REGEX
+        elif re.search(
+            "(\\+\\d{1,2}\\s?)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}",
+            file_contents.upper(),
+        ):
+            # Testing has shown false positives
+            file.severity = Severity.yellow
+
+            file.flaggedItems.append("PHONE # PATTERN(RegEx)")
+            logging.error(
+                f"This file potentially contains Private Information| File: {file.filepath}"
+            )
+        elif re.search(
+            "national[\\s_]?id|social[\\s_]?security[\\s_]?number|ssn|e-?mail[\\s_]address|phone[\\s_]?number",
             file_contents.lower(),
         ):
             file.severity = Severity.yellow
-            file.flaggeditems.append("SSN(Hard-coded)")
+            file.flaggedItems.append("HARD-CODED SEARCH TERM")
             logging.error(
                 f"This file potentially contains Private Information| File: {file.filepath}"
             )
@@ -80,30 +104,31 @@ def displayfiles(file_folder: list[File]) -> None:
 
 def severity_color(x: int) -> str:
     if x == 2:
-        return "\033[1;31;40m Red"
+        return "Red"
     if x == 1:
-        return "\033[1;33;40m Yellow"
-    return "\033[1;32;40m Green"
+        return "Yellow"
+    return "Green"
 
 
 def create_file_data(file_folder: list[File]) -> None:
-    table = Table(title="Flagged File Data")
-    table.add_column("Severity", justify="left")
-    table.add_column("File Path", justify="left", style="blue")
-    table.add_column("Flagged Items", justify="left", style="purple")
+    table: Table = Table(title="Flagged File Data")
+    table.add_column("Severity", justify="left", style="bold")
+    table.add_column("File Path", justify="left")
+    table.add_column("Flagged Items", justify="left", style="bold")
     for file in file_folder:
         if file.severity.value > 0:
             table.add_row(
                 file.severity.name,
                 file.filepath,
-                ", ".join(file.flaggeditems),
+                ", ".join(file.flaggedItems),
+                style=severity_color(file.severity.value),
             )
 
-    console = Console()
+    console: Console = Console()
     console.print(table)
 
 
-def console_print(file_folder: list[File]):
+def console_print(file_folder: list[File]) -> None:
     print(
         f"Files Flagged | File Count: {len([x for x in file_folder if x.severity.value>0])}"
     )

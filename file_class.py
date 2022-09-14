@@ -7,11 +7,11 @@ class File:
     Create File Object
     """
 
-    __slots__ = ["filename", "filepath", "extension", "severity", "flaggeditems"]
+    __slots__ = ["filename", "filepath", "extension", "severity", "flaggedItems"]
 
     def __init__(self, file: str, directory: str) -> None:
         self.filename: str = file
         self.filepath: str = join(directory, file)
         self.extension: str = ""
         self.severity: Severity = Severity.green
-        self.flaggeditems: list[str] = []
+        self.flaggedItems: list[str] = []
